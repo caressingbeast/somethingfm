@@ -64,6 +64,10 @@
             </div>
             <div class="messages">
               <div class="empty" ng-if="!main.messages.length">Be the first to say something!</div>
+              <div ng-repeat="message in main.messages">
+                {{ message.username }}
+                {{ message.text }}
+              </div>
             </div>
             <form ng-submit="main.postMessage()">
               <input class="form-input" placeholder="Enter message" ng-model="main.message" />

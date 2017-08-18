@@ -106,6 +106,16 @@ module.exports = function (io, ADMIN_PASSWORD) {
       io.sockets.emit('delete video from playlist', video);
     });
 
+    socket.on('message posted', function (message) {
+      if (!message) {
+        return;
+      }
+
+      messages.push(message);
+
+      io.sockets.emit('add message', message);
+    });
+
     socket.on('socket refresh response', function () {
       // do nothing, keep socket alive
     });

@@ -192,6 +192,33 @@ describe('MainCtrl', function () {
     });
   });
 
+  describe('.postMessage', function () {
+
+    it('ignores empty messages', function () {
+      spyOn(SocketService, 'emit').and.callThrough();
+
+      $controller.postMessage();
+
+      expect(SocketService.emit).not.toHaveBeenCalled();
+    });
+
+    it('calls SocketService.emit with valid message', function () {
+      var message = {
+        text: 'message',
+        username: 'username'
+      };
+
+      spyOn(SocketService, 'emit').and.callThrough();
+
+      $controller.message = message.text;
+      $controller.username = message.username;
+      $controller.postMessage();
+
+      expect($controller.message).toEqual('');
+      expect(SocketService.emit).toHaveBeenCalledWith('message posted', message);
+    });
+  });
+
   describe('SocketService listeners', function () {
 
     describe('"socket connected"', function () {
@@ -302,6 +329,67 @@ describe('MainCtrl', function () {
         socketEvents['delete video from playlist'](video);
 
         expect($controller.playlist.length).toEqual(0);
+      });
+    });
+
+    describe('"add message"', function () {
+
+      it('adds new message to messages', function () {
+        var message = {
+          text: 'message',
+          username: 'username'
+        };
+
+        socketEvents['add message'](message);
+
+        expect($controller.messages[0]).toEqual(message);
+      });
+    });
+
+    describe('"play next video"', function () {
+
+      it('removes current video from playlist and adds to playedVideos', function () {
+        var video = {
+          id: {
+            videoId: '1'
+          }
+        };
+
+        spyOn(VideoService, 'launchPlayer').and.callThrough();
+
+        $controller.playlist = [video];
+
+        socketEvents['play next video'](video);
+
+        expect($controller.playedVideos.length).toEqual(1);
+        expect($controller.playlist.length).toEqual(0);
+        expect(VideoService.launchPlayer).not.toHaveBeenCalled();
+      });
+
+      it('updates currentVideo and calls VideoService.launchPlayer if playlist is not empty', function () {
+        var videos = [
+          {
+            id: {
+              videoId: '1'
+            }
+          },
+          {
+            id: {
+              videoId: '2'
+            }
+          }
+        ];
+
+        spyOn(VideoService, 'launchPlayer').and.callThrough();
+
+        $controller.playlist = videos;
+
+        socketEvents['play next video'](videos[0]);
+
+        expect($controller.currentVideo.video.id.videoId).toEqual('2');
+        expect($controller.playedVideos.length).toEqual(1);
+        expect($controller.playlist.length).toEqual(1);
+        expect(VideoService.launchPlayer).toHaveBeenCalled();
       });
     });
 

@@ -5,7 +5,7 @@ var path = require('path');
 module.exports = function (app) {
 
   app.get('/refresh', function (req, res) {
-    return res.send();
+    return res.send('socket refresh response');
   });
 
   app.get('*', function (req, res) {

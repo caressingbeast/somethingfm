@@ -7,7 +7,7 @@ module.exports = function (io, ADMIN_PASSWORD) {
   io.sockets.on('connection', function (socket) {
     var username;
 
-    // populate initial data for new user
+    // send initial data to new user
     socket.emit('socket connected', {});
 
     socket.on('refresh socket response', function () {

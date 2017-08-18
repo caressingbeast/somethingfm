@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>something.fm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/lib/socket.io-2.0.3.min.js"></script><!-- load socket.io -->
     <script src="js/lib/jquery-3.2.1.min.js"></script><!-- load jquery -->
@@ -12,7 +12,92 @@
     <script src="js/app.js"></script> <!-- load app -->
     <script src="js/main/main.controller.js"></script> <!-- load main controller -->
     <script src="js/services/socket.service.js"></script> <!-- load socket service -->
+    <script src="js/services/youtube.service.js"></script> <!-- load youtube service -->
   </head>
   <body ng-app="somethingfm" ng-controller="MainCtrl as main">
+
+    <div class="login" ng-if="main.showLogin">
+
+      <div class="login-content">
+        <form ng-submit="main.saveUser()">
+          <h1>something.fm</h1>
+          <input class="form-input" type="text" maxlength="30" placeholder="Enter username" ng-model="main.username" />
+          <button class="button" type="submit">Enter</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="header">
+
+        <div class="column float-left">
+          <h1>something.fm</h1>
+        </div>
+
+        <div class="column float-right">
+          <form ng-submit="main.search()">
+            <input class="float-left" type="text" placeholder="Search YouTube" ng-model="main.query" />
+            <button class="float-right" type="submit"><i class="fa fa-search"></i></button>
+          </form>
+        </div>
+
+      </div>
+
+      <div class="main-content">
+
+        <div class="column float-left">
+
+          <div class="results-content" ng-if="main.showResults">
+            <h3>{{ main.results.length }} results for "{{ main.searchQuery }}" <i class="fa fa-close" ng-click="main.clearSearch()"></i></h3>
+            <div class="result" ng-repeat="video in main.results" ng-click="main.add($index, video)">
+              <h2>{{ video.snippet.title }}</h2>
+              <p>{{ video.snippet.description }}</p>
+            </div>
+          </div>
+
+          <div class="messages-content">
+            <div class="users-content">
+              <ul class="users">
+                <li ng-repeat="user in main.users" ng-class="{ 'active': main.username === user }">{{ user }}</li>
+              </ul>
+            </div>
+            <div class="messages">
+              <div class="empty" ng-if="!main.messages.length">Be the first to say something!</div>
+            </div>
+            <form ng-submit="main.postMessage()">
+              <input class="form-input" placeholder="Enter message" ng-model="main.message" />
+            </form>
+          </div>
+
+        </div>
+
+
+        <div class="column float-right video-content">
+
+          <div class="video-container">
+            <div id="player"></div>
+            <div class="playlist">
+              <div class="queue">
+                <div class="current" ng-if="main.currentVideo.video">{{ main.currentVideo.video.snippet.title }}</div>
+                <div class="queue-content">
+                  <div class="empty" ng-if="main.playlist.length < 2">No videos in queue.</div>
+                  <div class="queue-list" ng-if="main.playlist.length > 1">
+                    <div class="video" ng-repeat="video in main.playlist" ng-if="main.currentVideo.video.id.videoId !== video.id.videoId">
+                      {{ video.snippet.title }}
+                      <a ng-click="main.delete(video)" ng-if="main.username === video.username">delete</a>
+                    </div>
+                </div>
+              </div>
+              </div>
+              <div class="history"></div>
+            </div>
+          </div>
+
+        </div>
+
+      <div class="footer"></div>
+
+    </div>
   </body>
 </html>

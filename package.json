@@ -1,0 +1,32 @@
+{
+  "name": "something.fm",
+  "version": "1.0.0",
+  "description": "Turntable.fm-style playlist sharing using YouTube videos",
+  "homepage": "https://github.com/caressingbeast/somethingfm",
+  "bugs": "https://github.com/caressingbeast/somethingfm/issues",
+  "license": "UNLICENSED",
+  "main": "server.js",
+  "author": "Brandon Burning (http://brandonburning.com)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caressingbeast/somethingfm.git"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "method-override": "^2.3.9",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.7.0",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.0"
+  },
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  },
+  "engines": {
+    "node": "6.4.0"
+  }
+}

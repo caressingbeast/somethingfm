@@ -413,7 +413,7 @@ describe('MainCtrl', function () {
       it('calls /refresh and calls SocketService.emit', function () {
         var emit = 'emit';
 
-        $httpBackend.when('GET', '/refresh').respond(emit);
+        $httpBackend.when('GET', '/refresh').respond({ emit: emit });
         spyOn(SocketService, 'emit').and.callThrough();
 
         socketEvents['socket refresh request']();

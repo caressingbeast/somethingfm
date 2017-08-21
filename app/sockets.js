@@ -75,10 +75,7 @@ module.exports = function (io, ADMIN_PASSWORD) {
         return;
       }
 
-      socket.emit('current video response', {
-        startSeconds: activeVideo.startSeconds,
-        video: activeVideo
-      });
+      socket.emit('current video response', activeVideo);
     });
 
     socket.on('update video response', function (data) {
@@ -114,6 +111,10 @@ module.exports = function (io, ADMIN_PASSWORD) {
       messages.push(message);
 
       io.sockets.emit('add message', message);
+    });
+
+    socket.on('next video request', function (video) {
+        socket.emit('play next video', video);
     });
 
     socket.on('socket refresh response', function () {
